@@ -1,41 +1,72 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 
 public class JNEXT {
 
-	public static void main(String[] args) {
-		Scanner in = new Scanner(System.in);
-		int t = in.nextInt();
+	public static void main(String[] args)throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		int t = Integer.parseInt(in.readLine());
+		
 		while(t-->0) {
-			int n = in.nextInt();
-			int li = n-1;//li-->last index
-			//int ar[] = new int[n];
-			ArrayList<Integer> ar = new ArrayList<>(n);
-		 	while(n-->0){
-		 		ar.add(in.nextInt());
+			int n = Integer.parseInt(in.readLine());
+			String s = in.readLine();
+		 	long ar[] = new long[n];
+		 	int i = 0;
+		 	for(String ch : s.split(" ")) {
+		 		ar[i++] = Long.valueOf(ch);
 		 	}
-		 	//System.out.println(ar);
-		 	if(ar.get(0)==9 && ar.get(li)==9) {
-		 		System.out.println(-1);
-		 	}
-		 	else
-		 	{
-		 		int quot;
-		 		do {
-		 			quot = (ar.get(li)+1)/10;
-		 			ar.set(li, (ar.get(li)+1)%10);
-		 			li--;
-		 		}while(quot!=0);
-		 		//Print the element
-		 		Iterator<Integer> it = ar.iterator();
-		 		String s="";
-		 		while(it.hasNext()) {
-		 			s += it.next();
+		 	int pivot=-1;
+		 	//1.Find the 1st non increasing no.
+		 	for(i=n-1;i>0;i--) {
+		 		if(ar[i]>ar[i-1]) {
+		 			//2.Set the pivot to the no.
+		 		pivot = i-1;
+		 		//System.out.println(pivot);
+		 		break;
 		 		}
-		 		System.out.println(s);
+		 		
 		 	}
-
+		 	if(pivot!=-1) {
+		 		int r;
+		 		//3.Find the rightmost largest no.
+		 		for(i=n-1;i>pivot;i--) {
+		 			//System.out.println("ar[pivot] "+ar[pivot]+" ar[i] "+ar[i]);
+		 			if(ar[pivot]<ar[i]) {
+		 				r = i;
+		 				//4.Swap the elements
+		 				long temp = ar[pivot];
+		 				ar[pivot] = ar[i];
+		 				ar[i] = temp;
+		 				
+		 				//5.Reverse the remaining
+		 				int li = n-1;
+		 				for(int j = pivot+1;j<n-1;j++) {
+		 					//System.out.println("j "+j+" : "+ar[j]+" "+ar[li]);
+		 					temp = ar[j];
+		 					//System.out.println("temp "+temp);
+		 					ar[j]=ar[li];
+		 					//System.out.println("ar[j]"+ar[j]);
+		 					ar[li]= temp;
+		 					//System.out.println("ar[li]"+ar[li]);
+		 					li--;
+		 				}
+		 				//System.out.println("ri "+r);
+		 				break;
+		 			}
+		 		}
+		 		
+		 		//Display the numbers
+			 	for(i = 0;i<n;i++) {
+			 		System.out.print(ar[i]);
+			 	}
+			 	System.out.println();
+		 		
+		 	}else {
+		 		System.out.println(pivot);
+		 	}
+			
 		}
 	}
 
